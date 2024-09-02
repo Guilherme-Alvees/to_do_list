@@ -71,7 +71,7 @@ function Navbar({ theme, toggleTheme }) {
           </MenuItem>
           <MenuItem
             component={RouterLink}
-            to="/login"
+            to="/"
             onClick={handleLogout}
           >
             Sair

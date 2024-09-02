@@ -91,7 +91,7 @@ const Register = () => {
           fullWidth
           sx={{ mt: 4 }}
           component={RouterLink}
-          to="/login"
+          to="/"
         >
           Cadastrar
         </Button>
@@ -101,7 +101,7 @@ const Register = () => {
           </Typography>
           <Link
             component={RouterLink}
-            to="/login"
+            to="/"
             sx={{ 
               fontStyle: 'italic', 
               color: Colors.Blue_Primary,
