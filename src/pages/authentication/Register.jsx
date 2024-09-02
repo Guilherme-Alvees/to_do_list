@@ -1,4 +1,3 @@
-// src/pages/authentication/LoginForm.jsx
 import React from 'react';
 import Colors from '../../utils/colors';
 import { 
@@ -9,7 +8,6 @@ import {
   Container, 
   Link 
 } from '@mui/material';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
@@ -19,7 +17,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link as RouterLink } from 'react-router-dom';
 
-const LoginForm = () => {
+const Register = () => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -44,7 +42,14 @@ const LoginForm = () => {
       </Box>
       
       <Box component="form" mt={8} sx={{ backgroundColor: Colors.White_Light, padding: '10%', borderRadius: '12px' }}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+        <Box sx={{ mb: 3 }}>
+          <TextField 
+            fullWidth 
+            label="Nome" 
+            variant="standard"
+          />
+        </Box>
+        <Box sx={{ mb: 3 }}>
           <TextField 
             fullWidth 
             id="input-with-sx" 
@@ -53,7 +58,7 @@ const LoginForm = () => {
             type='email'
           />
         </Box>
-        <FormControl fullWidth variant="standard">
+        <FormControl fullWidth variant="standard" sx={{ mb: 3 }}>
           <InputLabel htmlFor="standard-adornment-password">Senha</InputLabel>
           <Input
             fullWidth
@@ -73,36 +78,26 @@ const LoginForm = () => {
             }
           />
         </FormControl>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Checkbox defaultChecked size="small" />
-            <Typography variant="body2" sx={{ marginLeft: '-5px', color: Colors.Black_Dark }}>
-              Manter conectado
-            </Typography>
-          </Box>
-          <Link 
-            href="/esqueceu-senha"
-            sx={{ fontStyle: 'italic', color: Colors.Blue_Primary }}
-          >
-            Esqueceu a senha?
-          </Link>
-        </Box>
         <Button
           variant="contained"
           color="primary"
           fullWidth
           sx={{ mt: 4 }}
         >
-          Entrar
+          Cadastrar
         </Button>
         <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center', mt: 2 }}>
           <Typography variant="body2" sx={{ mr: 1, color: Colors.Black_Dark }}>
             Ainda não tem conta?
           </Typography>
-          <Link 
+          <Link
             component={RouterLink}
-            to="/register"
-            sx={{ fontStyle: 'italic', color: Colors.Blue_Primary }}
+            to="/login"
+            sx={{ 
+              fontStyle: 'italic', 
+              color: Colors.Blue_Primary,
+              cursor: 'pointer'
+            }}
           >
             Cadastrar-se
           </Link>
@@ -112,4 +107,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Register;

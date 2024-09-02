@@ -1,18 +1,19 @@
 import './App.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginForm from './pages/authentication/LoginForm'
-import RegisterForm from './pages/authentication/RegisterForm'
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Login from './pages/authentication/Login'
+import Register from './pages/authentication/Register'
+import Crud from './pages/home/Crud';
 
 function App() {
 
   return (
-    <Router>
-    <Routes>
-      <Route path="/" element={<LoginForm />} />
-      <Route path="/register" element={<RegisterForm />} />
-    </Routes>
-  </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<Register/>} />
+        <Route path="/crud" element={<Crud/>} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
