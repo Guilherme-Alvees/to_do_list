@@ -87,14 +87,15 @@ const Login = () => {
             Esqueceu a senha?
           </Link>
         </Box>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 4 }}
-        >
-          Entrar
-        </Button>
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ mt: 4 }}
+            component={RouterLink}
+            to="/crud"
+          >
+            Entrar
+          </Button>
         <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center', mt: 2 }}>
           <Typography variant="body2" sx={{ mr: 1, color: Colors.Black_Dark }}>
             Ainda não tem conta?

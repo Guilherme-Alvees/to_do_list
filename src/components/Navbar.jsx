@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Switch, Menu, MenuItem } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 function Navbar({ theme, toggleTheme }) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const location = useLocation();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -14,10 +15,19 @@ function Navbar({ theme, toggleTheme }) {
     setAnchorEl(null);
   };
 
+  const ChangeScreen = () => {
+    return location.pathname === "/profile" ? "/crud" : "/profile";
+  };
+
   const handleLogout = () => {
-    // Lógica para logout do usuário
     console.log("Usuário saiu.");
     setAnchorEl(null);
+    // Lógica de logout (limpar tokens, etc.)
+  };
+
+  // Condicional para o texto do MenuItem
+  const getMenuItemText = () => {
+    return location.pathname === "/profile" ? "Home" : "Perfil";
   };
 
   return (
@@ -52,8 +62,20 @@ function Navbar({ theme, toggleTheme }) {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Perfil</MenuItem>
-          <MenuItem onClick={handleLogout}>Sair</MenuItem>
+          <MenuItem
+            onClick={handleClose}
+            component={RouterLink}
+            to={ChangeScreen()}
+          >
+            {getMenuItemText()}
+          </MenuItem>
+          <MenuItem
+            component={RouterLink}
+            to="/login"
+            onClick={handleLogout}
+          >
+            Sair
+          </MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>

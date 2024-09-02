@@ -58,6 +58,13 @@ const Register = () => {
             type='email'
           />
         </Box>
+        <Box sx={{ mb: 3 }}>
+          <TextField 
+            fullWidth 
+            label="Telefone" 
+            variant="standard"
+          />
+        </Box>
         <FormControl fullWidth variant="standard" sx={{ mb: 3 }}>
           <InputLabel htmlFor="standard-adornment-password">Senha</InputLabel>
           <Input
@@ -83,12 +90,14 @@ const Register = () => {
           color="primary"
           fullWidth
           sx={{ mt: 4 }}
+          component={RouterLink}
+          to="/login"
         >
           Cadastrar
         </Button>
         <Box sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center', mt: 2 }}>
           <Typography variant="body2" sx={{ mr: 1, color: Colors.Black_Dark }}>
-            Ainda não tem conta?
+            Já tem uma conta?
           </Typography>
           <Link
             component={RouterLink}
@@ -99,7 +108,7 @@ const Register = () => {
               cursor: 'pointer'
             }}
           >
-            Cadastrar-se
+            Conectar-se
           </Link>
         </Box>
       </Box>

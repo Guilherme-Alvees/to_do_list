@@ -74,7 +74,6 @@ function Crud() {
             Gerenciamento de Tarefas
           </Typography>
         </Box>
-
         <Box mt={4} component="form" onSubmit={e => e.preventDefault()} sx={{ backgroundColor: theme === 'light' ? Colors.White_Light : Colors.Dark_Light, padding: '5%', borderRadius: '12px'}}>
           <TextField 
             fullWidth 
