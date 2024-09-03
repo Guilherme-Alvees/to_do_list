@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Adicione useNavigate
+import { createUser } from '../../axios';
 import Colors from '../../utils/colors';
 import { 
   TextField, 
@@ -20,7 +22,35 @@ import Alert from '@mui/material/Alert';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Register = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const navigate = useNavigate(); // Use useNavigate para redirecionar
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await createUser({
+        name,
+        phone,
+        email,
+        password,
+      });
+      console.log('Response:', response.data);
+      handleClickRegister(); // Abre o Snackbar após sucesso
+
+      setTimeout(() => {
+        navigate('/'); // Redireciona para a tela de login após 3 segundos
+      }, 3000);
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -32,8 +62,6 @@ const Register = () => {
     event.preventDefault();
   };
 
-  const [open, setOpen] = React.useState(false);
-
   const handleClickRegister = () => {
     setOpen(true);
   };
@@ -42,7 +70,6 @@ const Register = () => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
@@ -57,9 +84,16 @@ const Register = () => {
         </Typography>
       </Box>
       
-      <Box component="form" mt={8} sx={{ backgroundColor: Colors.White_Light, padding: '10%', borderRadius: '12px' }}>
+      <Box 
+        component="form" 
+        mt={8} 
+        sx={{ backgroundColor: Colors.White_Light, padding: '10%', borderRadius: '12px' }}
+        onSubmit={handleSubmit}
+      >
         <Box sx={{ mb: 3 }}>
           <TextField 
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             fullWidth 
             label="Nome" 
             variant="standard"
@@ -67,6 +101,8 @@ const Register = () => {
         </Box>
         <Box sx={{ mb: 3 }}>
           <TextField 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             fullWidth 
             id="input-with-sx" 
             label="Email" 
@@ -76,6 +112,8 @@ const Register = () => {
         </Box>
         <Box sx={{ mb: 3 }}>
           <TextField 
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             fullWidth 
             label="Telefone" 
             variant="standard"
@@ -84,6 +122,8 @@ const Register = () => {
         <FormControl fullWidth variant="standard" sx={{ mb: 3 }}>
           <InputLabel htmlFor="standard-adornment-password">Senha</InputLabel>
           <Input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             fullWidth
             id="standard-adornment-password"
             type={showPassword ? 'text' : 'password'}
@@ -103,17 +143,15 @@ const Register = () => {
         </FormControl>
         <Box>
           <Button
-          onClick={handleClickRegister}
-          variant="contained"
-          color="primary"
-          fullWidth
-          sx={{ mt: 4 }}
-          component={RouterLink}
-          // to="/"
-        >
-          Cadastrar
-        </Button>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            type="submit" // Tipo do botão alterado para "submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 4 }}
+          >
+            Cadastrar
+          </Button>
+          <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
             <Alert
               onClose={handleClose}
               severity="success"
