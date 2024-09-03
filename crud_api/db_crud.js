@@ -1,4 +1,3 @@
-// db_crud.js
 import mysql from "mysql2";
 
 export const db_crud = mysql.createConnection({
@@ -10,8 +9,8 @@ export const db_crud = mysql.createConnection({
 
 db_crud.connect((err) => {
     if (err) {
-        console.error("Erro ao conectar ao banco de dados:", err.message);
+        console.error("Erro ao conectar ao banco de dados!", err.message);
         return;
     }
-    console.log("Conectado ao banco de dados.");
+    console.log("Banco de dados conectado com sucesso!");
 });
