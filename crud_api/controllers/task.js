@@ -15,11 +15,9 @@ export const postTask = (req, res) => {
         .json({ error: "Erro ao inserir nova tarefa ao banco de dados" });
     }
 
-    return res
-      .status(201)
-      .json({
-        message: "Tarefa adicionada com sucesso",
-        taskId: result.insertId,
-      }); // Corrigido para "taskId"
+    return res.status(201).json({
+      message: "Tarefa adicionada com sucesso",
+      taskId: result.insertId,
+    }); // Corrigido para "taskId"
   });
 };

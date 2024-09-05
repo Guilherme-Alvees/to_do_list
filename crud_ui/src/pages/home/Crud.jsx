@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createTask, getUsers } from "../../axios.js";
+import { createTask } from "../../axios.js";
 import Navbar from "../../components/Navbar";
 import Colors from "../../utils/colors";
 import {
@@ -27,47 +27,55 @@ function Crud() {
   const [editingTaskIndex, setEditingTaskIndex] = useState(null);
   const [theme, setTheme] = useState("light");
   const [open, setOpen] = useState(false);
+  const [errorOpen, setErrorOpen] = useState(false);
 
   const handleAddTask = async () => {
-    setOpen(true);
-
-    // if (editingTaskIndex !== null) {
-    //   const updatedTasks = tasks.map((task, index) =>
-    //     index === editingTaskIndex
-    //       ? {
-    //           title: taskTitle,
-    //           description: taskDescription,
-    //           completed: task.completed,
-    //         }
-    //       : task
-    //   );
-    //   setTasks(updatedTasks);
-    //   setEditingTaskIndex(null);
-    // } else {}
-    try {
-      const userId = 1;
-      console.log(userId);
-
-      const newTaskData = {
-        title: taskTitle,
-        description: taskDescription,
-        userId: userId,
-      };
-      const newTask = await createTask(newTaskData);
-      setTasks([
-        ...tasks,
-        {
+    if (editingTaskIndex !== null) {
+      const updatedTasks = tasks.map((task, index) =>
+        index === editingTaskIndex
+          ? {
+              title: taskTitle,
+              description: taskDescription,
+              completed: task.completed,
+            }
+          : task
+      );
+      setTasks(updatedTasks);
+      setEditingTaskIndex(null);
+    } else {
+      try {
+        const userId = 1; // Hardcoded UserID for now
+        const newTaskData = {
           title: taskTitle,
           description: taskDescription,
-          completed: false,
-        },
-      ]);
-    } catch (error) {
-      console.error("Erro ao adicionar tarefa:", error);
-    }
+          userId: userId,
+        };
+        await createTask(newTaskData);
+        setTasks([
+          ...tasks,
+          {
+            title: taskTitle,
+            description: taskDescription,
+            completed: false,
+          },
+        ]);
+        setOpen(true); // Show success Snackbar only after success
+      } catch (error) {
+        console.error("Error adding task:", error);
+        handleClickError(); // Show error Snackbar
+      }
 
-    setTaskTitle("");
-    setTaskDescription("");
+      setTaskTitle("");
+      setTaskDescription("");
+    }
+  };
+
+  const handleClickError = () => {
+    setErrorOpen(true); // Show error Snackbar
+  };
+
+  const handleErrorClose = () => {
+    setErrorOpen(false); // Close error Snackbar
   };
 
   const handleDeleteTask = (index) => {
@@ -101,7 +109,6 @@ function Crud() {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
@@ -111,7 +118,7 @@ function Crud() {
       <Container maxWidth="sm">
         <Box mt={5}>
           <Typography variant="h4" component="h1" align="center">
-            Gerenciamento de Tarefas
+            Gerenciador
           </Typography>
         </Box>
         <Box
@@ -127,7 +134,7 @@ function Crud() {
         >
           <TextField
             fullWidth
-            label="Título da Tarefa"
+            label="Titulo da tarefa"
             variant="outlined"
             value={taskTitle}
             onChange={(e) => setTaskTitle(e.target.value)}
@@ -135,7 +142,7 @@ function Crud() {
           />
           <TextField
             fullWidth
-            label="Descrição da Tarefa"
+            label="Descrição da tarefa"
             variant="outlined"
             value={taskDescription}
             onChange={(e) => setTaskDescription(e.target.value)}
@@ -148,9 +155,9 @@ function Crud() {
               fullWidth
               onClick={handleAddTask}
             >
-              {editingTaskIndex !== null ? "Salvar Tarefa" : "Adicionar Tarefa"}
+              {editingTaskIndex !== null ? "Salvar tarefa" : "Adicionar tarefa"}
             </Button>
-            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
               <Alert
                 onClose={handleClose}
                 severity="success"
@@ -160,9 +167,22 @@ function Crud() {
                 Tarefa adicionada com sucesso!
               </Alert>
             </Snackbar>
+            <Snackbar
+              open={errorOpen}
+              autoHideDuration={4000}
+              onClose={handleErrorClose}
+            >
+              <Alert
+                onClose={handleErrorClose}
+                severity="error"
+                variant="filled"
+                sx={{ width: "100%" }}
+              >
+                Erro ao adicionar tarefa!
+              </Alert>
+            </Snackbar>
           </Box>
         </Box>
-
         <List sx={{ mt: 4 }}>
           {tasks.map((task, index) => (
             <ListItem

@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, IconButton, Typography, Switch, Menu, MenuItem } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Switch,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import { Link as RouterLink, useLocation } from "react-router-dom";
 
 function Navbar({ theme, toggleTheme }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -15,19 +23,10 @@ function Navbar({ theme, toggleTheme }) {
     setAnchorEl(null);
   };
 
-  const ChangeScreen = () => {
-    return location.pathname === "/profile" ? "/crud" : "/profile";
-  };
-
   const handleLogout = () => {
     console.log("Usuário saiu.");
     setAnchorEl(null);
     // Lógica de logout (limpar tokens, etc.)
-  };
-
-  // Condicional para o texto do MenuItem
-  const getMenuItemText = () => {
-    return location.pathname === "/profile" ? "Home" : "Perfil";
   };
 
   return (
@@ -36,7 +35,7 @@ function Navbar({ theme, toggleTheme }) {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           To do List
         </Typography>
-        <Switch checked={theme === 'dark'} onChange={toggleTheme} />
+        <Switch checked={theme === "dark"} onChange={toggleTheme} />
         <IconButton
           edge="end"
           color="inherit"
@@ -51,29 +50,18 @@ function Navbar({ theme, toggleTheme }) {
           id="menu-appbar"
           anchorEl={anchorEl}
           anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            vertical: "top",
+            horizontal: "right",
           }}
           keepMounted
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
+            vertical: "top",
+            horizontal: "right",
           }}
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem
-            onClick={handleClose}
-            component={RouterLink}
-            to={ChangeScreen()}
-          >
-            {getMenuItemText()}
-          </MenuItem>
-          <MenuItem
-            component={RouterLink}
-            to="/"
-            onClick={handleLogout}
-          >
+          <MenuItem component={RouterLink} to="/" onClick={handleLogout}>
             Sair
           </MenuItem>
         </Menu>
