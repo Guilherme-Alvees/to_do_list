@@ -1,5 +1,35 @@
 import { db_crud } from "../db_crud.js";
 
+// Autenticação de Usuários
+export const authUser = (req, res) => {
+  const q = "SELECT email, password FROM users WHERE email = ?";
+
+  const { email, password } = req.body;
+
+  // Executa a consulta SQL
+  db_crud.query(q, [email], (err, data) => {
+    if (err) {
+      console.error("Erro na consulta:", err);
+      return res.status(500).json({ message: "Erro no servidor" });
+    }
+
+    // Verifica se o usuário foi encontrado
+    if (data.length === 0) {
+      return res.status(401).json({ message: "Credenciais inválidas" });
+    }
+
+    const user = data[0];
+
+    // Comparação de senha (direta, sem hash)
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Credenciais inválidas" });
+    }
+
+    // Autenticação bem-sucedida
+    return res.status(200).json({ user, message: "Credenciais válidas" });
+  });
+};
+
 export const getUsers = (_, res) => {
   const q = "SELECT * FROM users";
 

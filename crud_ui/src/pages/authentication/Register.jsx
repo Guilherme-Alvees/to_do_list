@@ -9,6 +9,10 @@ import {
   Box,
   Container,
   Link,
+  Backdrop,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Input from "@mui/material/Input";
@@ -17,8 +21,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
 import { Link as RouterLink } from "react-router-dom";
 
 const Register = () => {
@@ -29,12 +31,16 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [open, setOpen] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
+  const [openBackdrop, setOpenBackdrop] = useState(false);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Abre o Backdrop
+      setOpenBackdrop(true);
+
       const response = await createUser({
         name,
         phone,
@@ -42,42 +48,34 @@ const Register = () => {
         password,
       });
       console.log("Response:", response.data);
+
+      // Exibe o Snackbar de sucesso
       handleClickRegister();
 
+      // Aguarda 2 segundos e redireciona para a página de login
       setTimeout(() => {
-        navigate("/");
-      }, 3000);
+        setOpenBackdrop(false); // Fecha o Backdrop
+        navigate("/login"); // Redireciona para a tela de login
+      }, 2000); // 2 segundos
     } catch (error) {
       console.error("Error:", error);
+
+      // Fecha o Backdrop e exibe o Snackbar de erro
+      setOpenBackdrop(false);
       handleClickError(); // Exibe o Snackbar de erro
     }
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleClickRegister = () => {
-    setOpen(true);
-  };
-
-  const handleClickError = () => {
-    setErrorOpen(true);
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+  const handleMouseDownPassword = (event) => event.preventDefault();
+  const handleClickRegister = () => setOpen(true);
+  const handleClickError = () => setErrorOpen(true);
+  const handleClose = () => {
     setOpen(false);
+    setOpenBackdrop(false);
   };
-
   const handleErrorClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    if (reason === "clickaway") return;
     setErrorOpen(false);
   };
 
@@ -156,17 +154,20 @@ const Register = () => {
             }
           />
         </FormControl>
+
         <Box>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            sx={{ mt: 4 }}
-          >
+          <Button type="submit" variant="contained" color="primary" fullWidth>
             Cadastrar
           </Button>
-          <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={openBackdrop}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+
+          <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
             <Alert
               onClose={handleClose}
               severity="success"
@@ -176,9 +177,10 @@ const Register = () => {
               Usuário cadastrado com sucesso!
             </Alert>
           </Snackbar>
+
           <Snackbar
             open={errorOpen}
-            autoHideDuration={3000}
+            autoHideDuration={4000}
             onClose={handleErrorClose}
           >
             <Alert
@@ -191,6 +193,7 @@ const Register = () => {
             </Alert>
           </Snackbar>
         </Box>
+
         <Box
           sx={{
             display: "flex",
@@ -204,7 +207,7 @@ const Register = () => {
           </Typography>
           <Link
             component={RouterLink}
-            to="/"
+            to="/login"
             sx={{
               fontStyle: "italic",
               color: Colors.Blue_Primary,

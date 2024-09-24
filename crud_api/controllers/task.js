@@ -9,26 +9,52 @@ export const getTasks = (_, res) => {
   });
 };
 
-export const postTask = (req, res) => {
-  const { task_title, task_description, id_user } = req.body;
+export const getTasksByUsers = (req, res) => {
+  const id = req.params.id; // Obtendo o id do usuário da URL
 
-  const q = `
-        INSERT INTO tasks (task_title, task_description, id_user)
-        VALUES (?, ?, ?)`;
-
-  db_crud.query(q, [task_title, task_description, id_user], (err, result) => {
+  const q = "SELECT * FROM tasks WHERE id_user = ?";
+  db_crud.query(q, [id], (err, result) => {
     if (err) {
       console.error(err);
       return res
         .status(500)
-        .json({ error: "Erro ao inserir nova tarefa ao banco de dados" });
+        .json({ error: "Erro ao buscar tarefas do usuário" });
     }
 
-    return res.status(201).json({
-      message: "Tarefa adicionada com sucesso",
-      taskId: result.insertId,
-    }); // Corrigido para "taskId"
+    if (result.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Nenhuma tarefa encontrada para o usuário" });
+    }
+
+    return res.status(200).json(result); // Retornando as tarefas encontradas
   });
+};
+
+export const postTask = (req, res) => {
+  const { task_title, task_description, id_user, checked } = req.body;
+
+  const q = `
+        INSERT INTO tasks (task_title, task_description, id_user, checked)
+        VALUES (?, ?, ?, ?)`;
+
+  db_crud.query(
+    q,
+    [task_title, task_description, id_user, checked],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        return res
+          .status(500)
+          .json({ error: "Erro ao inserir nova tarefa ao banco de dados" });
+      }
+
+      return res.status(201).json({
+        message: "Tarefa adicionada com sucesso",
+        taskId: result.insertId,
+      }); // Corrigido para "taskId"
+    }
+  );
 };
 
 export const deleteTask = (req, res) => {

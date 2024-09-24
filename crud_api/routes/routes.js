@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  authUser,
   getUsers,
   postUsers,
   deleteUser,
@@ -12,9 +13,13 @@ import {
   deleteTask,
   putTasks,
   patchTask,
+  getTasksByUsers,
 } from "../controllers/task.js";
 
 const router = express.Router();
+
+//Authentication Usuers to Login
+router.post("/login", authUser);
 
 // Users
 router.get("/users", getUsers); // Rota para obter todos os usuários
@@ -29,5 +34,6 @@ router.post("/tasks", postTask); // Rota para adicionar uma nova tarefa
 router.put("/tasks/:id", putTasks); // Rota para atualizar um tarefa completamente
 router.delete("/tasks/:id", deleteTask); // Rota para deletar uma tarefa
 router.patch("/tasks/:id", patchTask);
+router.get("/tasks/:id", getTasksByUsers); //Rota para pegar as tarefas de acordo com o usuario
 
 export default router;

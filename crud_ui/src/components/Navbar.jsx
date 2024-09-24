@@ -1,19 +1,18 @@
 import React, { useState } from "react";
+
 import {
   AppBar,
   Toolbar,
   IconButton,
   Typography,
-  Switch,
   Menu,
   MenuItem,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 
-function Navbar({ theme, toggleTheme }) {
+function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
-  const location = useLocation();
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,7 +34,10 @@ function Navbar({ theme, toggleTheme }) {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           To do List
         </Typography>
-        <Switch checked={theme === "dark"} onChange={toggleTheme} />
+        <Typography>
+          Olá, Usuário
+          {/* {userName ? `Olá, ${userName}` : "Olá, Usuário"} */}
+        </Typography>
         <IconButton
           edge="end"
           color="inherit"
@@ -47,6 +49,7 @@ function Navbar({ theme, toggleTheme }) {
           <AccountCircle />
         </IconButton>
         <Menu
+          sx={{ mt: "45px" }}
           id="menu-appbar"
           anchorEl={anchorEl}
           anchorOrigin={{
@@ -62,6 +65,9 @@ function Navbar({ theme, toggleTheme }) {
           onClose={handleClose}
         >
           <MenuItem component={RouterLink} to="/" onClick={handleLogout}>
+            Perfil
+          </MenuItem>
+          <MenuItem component={RouterLink} to="/login" onClick={handleLogout}>
             Sair
           </MenuItem>
         </Menu>

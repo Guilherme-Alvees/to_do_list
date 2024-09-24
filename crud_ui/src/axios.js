@@ -18,6 +18,8 @@ axiosInstance.interceptors.response.use(
 
 export default axiosInstance;
 //Users
+export const authUser = (userData) => axiosInstance.post("/login", userData);
+
 export const getUsers = (userData) => axiosInstance.get("/users", userData);
 
 export const createUser = (userData) => axiosInstance.post("/users", userData);
@@ -32,3 +34,6 @@ export const editTask = (userData) => axiosInstance.put("/tasks/:id", userData);
 
 export const deleteTask = (userData) =>
   axiosInstance.delete("/tasks", userData);
+
+export const getTasksByUsers = (userData) =>
+  axiosInstance.get("/tasks/:id", userData);
