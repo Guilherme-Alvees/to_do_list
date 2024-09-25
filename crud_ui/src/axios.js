@@ -18,11 +18,12 @@ axiosInstance.interceptors.response.use(
 
 export default axiosInstance;
 //Users
-export const authUser = (userData) => axiosInstance.post("/login", userData);
+export const loginUser = (userData) => axiosInstance.post("/login", userData);
 
 export const getUsers = (userData) => axiosInstance.get("/users", userData);
 
-export const createUser = (userData) => axiosInstance.post("/users", userData);
+export const registerUser = (userData) =>
+  axiosInstance.post("/users", userData);
 
 //Tasks
 

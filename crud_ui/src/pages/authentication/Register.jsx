@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUser } from "../../axios";
+import { registerUser } from "../../axios";
 import Colors from "../../utils/colors";
 import {
   TextField,
@@ -41,7 +41,7 @@ const Register = () => {
       // Abre o Backdrop
       setOpenBackdrop(true);
 
-      const response = await createUser({
+      const response = await registerUser({
         name,
         phone,
         email,

@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node modules
 node_modules
 dist
 dist-ssr
@@ -22,3 +23,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ignore .env files
+/.env               # Ignora o .env na raiz do projeto
+crud_api/secrets/.env   # Ignora o .env dentro de secrets no backend

@@ -1,8 +1,11 @@
 import express from "express";
+import { authMiddleware } from "../middleware/authMiddleware.js";
 import {
-  authUser,
+  loginUser,
+  validateRegister,
+  registerUser,
+  getUserProfile,
   getUsers,
-  postUsers,
   deleteUser,
   putUser,
   patchUser,
@@ -19,11 +22,12 @@ import {
 const router = express.Router();
 
 //Authentication Usuers to Login
-router.post("/login", authUser);
+router.post("/login", loginUser);
 
 // Users
+router.get("/users", authMiddleware, getUserProfile);
 router.get("/users", getUsers); // Rota para obter todos os usuários
-router.post("/users", postUsers); // Rota para adicionar um novo usuário
+router.post("/users", validateRegister, registerUser); // Rota para adicionar um novo usuário
 router.put("/users/:id", putUser); // Rota para atualizar um usuário completamente
 router.patch("/users/:id", patchUser); // Rota para atualizar parcialmente um usuário
 router.delete("/users/:id", deleteUser); // Rota para deletar um usuário

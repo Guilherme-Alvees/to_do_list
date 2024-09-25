@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Colors from "../../utils/colors";
-import { authUser } from "../../axios.js";
+import { loginUser } from "../../axios.js";
 import {
   TextField,
   Button,
@@ -42,13 +42,13 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const authUserData = {
+    const loginUserData = {
       email: email,
       password: password,
     };
 
     try {
-      const response = await authUser(authUserData);
+      const response = await loginUser(loginUserData);
       console.log("Usuário autenticado com sucesso", response.data);
       // Redireciona para a rota principal após sucesso
       navigate("/");
