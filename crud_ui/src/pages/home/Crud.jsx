@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { createTask, getTasksByUsers } from "../../axios.js";
+import {
+  createTask,
+  getTasksByUsers,
+  deleteTask,
+  editTask,
+} from "../../axios.js";
 import Colors from "../../utils/colors";
 import Navbar from "../../components/Navbar.jsx";
-
 import {
   TextField,
   Button,
@@ -25,12 +29,12 @@ import EditIcon from "@mui/icons-material/Edit";
 function Crud() {
   const [taskTitle, setTaskTitle] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [open, setOpen] = useState(false); // Controle de abertura do Snackbar
-  const [alertType, setAlertType] = useState("success"); // Tipo de alerta (sucesso ou erro)
-  const [alertMessage, setAlertMessage] = useState(""); // Mensagem do alerta
-  const [checked, setChecked] = useState([]); // Estado dos checkboxes
-  const [tasks, setTasks] = useState([]); // Estado para armazenar as tarefas
-  const id_user = 5; // ID do usuário (pode ser dinâmico)
+  const [open, setOpen] = useState(false);
+  const [alertType, setAlertType] = useState("success");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [checked, setChecked] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const userId_registered = localStorage.getItem("userId");
 
   // Função para fechar o Snackbar
   const handleClose = (event, reason) => {
@@ -59,24 +63,18 @@ function Crud() {
     const taskData = {
       task_title: taskTitle,
       task_description: taskDescription,
-      id_user: id_user,
+      id_user: userId_registered,
     };
 
     try {
       const response = await createTask(taskData);
       console.log("Resposta do servidor:", response.data);
-
-      // Atualizar a lista de tarefas após adicionar uma nova
-      fetchTasks();
-
-      // Mostra o Snackbar de sucesso
+      fetchTasks(); // Atualizar a lista de tarefas após adicionar uma nova
       setAlertType("success");
       setAlertMessage("Tarefa adicionada com sucesso!");
       setOpen(true);
     } catch (error) {
       console.error("Erro ao adicionar a tarefa:", error);
-
-      // Mostra o Snackbar de erro
       setAlertType("error");
       setAlertMessage("Erro ao adicionar tarefa. Tente novamente.");
       setOpen(true);
@@ -86,13 +84,22 @@ function Crud() {
   // Função para buscar todas as tarefas do usuário
   const fetchTasks = async () => {
     try {
-      const response = await getTasksByUsers(id_user);
-      console.log("Tarefas recebidas:", response.data); // Adicione este log
-      setTasks(response.data); // Armazenar as tarefas no estado
+      const response = await getTasksByUsers(userId_registered);
+      console.log("Tarefas recebidas:", response.data);
+      if (response.data && Array.isArray(response.data)) {
+        setTasks(response.data);
+      } else {
+        console.error("Formato de resposta inesperado:", response.data);
+      }
     } catch (error) {
       console.error("Erro ao buscar as tarefas:", error);
     }
   };
+
+  // useEffect para buscar tarefas ao montar o componente
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <Container maxWidth="sm">
@@ -135,8 +142,6 @@ function Crud() {
           <Button variant="contained" color="primary" fullWidth type="submit">
             Adicionar tarefa
           </Button>
-
-          {/* Snackbar controlado pelo estado */}
           <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
             <Alert
               onClose={handleClose}
@@ -149,55 +154,38 @@ function Crud() {
           </Snackbar>
         </Box>
         <Box>
-          <List
-            sx={{
-              width: "100%",
-              marginTop: "10px",
-              bgcolor: "background.paper",
-              overflow: "auto",
-              maxHeight: 300,
-            }}
-          >
-            {tasks.map((task) => {
-              const labelId = `checkbox-list-label-${task.id}`;
-              const isChecked = checked.includes(task.id); // Verifica se a tarefa está marcada
+          <List>
+            {tasks.map((task, index) => {
+              const isChecked = checked.includes(task.task_title); // Usando o título como referência temporária
 
               return (
-                <ListItem
-                  key={task.id}
-                  secondaryAction={
-                    <Box>
-                      <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton edge="end" aria-label="edit">
-                        <EditIcon />
-                      </IconButton>
-                    </Box>
-                  }
-                  disablePadding
-                >
+                <ListItem key={index} disablePadding>
                   <ListItemButton
                     role={undefined}
-                    onClick={handleToggle(task.id)}
+                    onClick={handleToggle(task.task_title)}
                   >
                     <ListItemIcon>
                       <Checkbox checked={isChecked} />
                     </ListItemIcon>
                     <ListItemText
-                      id={labelId}
                       primary={
                         <Typography
                           sx={{
                             textDecoration: isChecked ? "line-through" : "none",
                           }}
                         >
-                          {task.task_title}
+                          {task.task_title || "Tarefa sem título"}
                         </Typography>
                       }
-                      secondary={task.task_description}
+                      secondary={task.task_description || "Sem descrição"}
                     />
                   </ListItemButton>
+                  <IconButton edge="end" aria-label="delete">
+                    <DeleteIcon />
+                  </IconButton>
+                  <IconButton edge="end" aria-label="edit">
+                    <EditIcon />
+                  </IconButton>
                 </ListItem>
               );
             })}

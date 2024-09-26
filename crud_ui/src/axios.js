@@ -31,7 +31,8 @@ export const getTask = (userData) => axiosInstance.get("/tasks", userData);
 
 export const createTask = (userData) => axiosInstance.post("/tasks", userData);
 
-export const editTask = (userData) => axiosInstance.put("/tasks/:id", userData);
+export const editTask = (userData) =>
+  axiosInstance.patch("/tasks/:id", userData);
 
 export const deleteTask = (userData) =>
   axiosInstance.delete("/tasks", userData);

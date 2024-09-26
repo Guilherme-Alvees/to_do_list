@@ -12,7 +12,8 @@ export const getTasks = (_, res) => {
 export const getTasksByUsers = (req, res) => {
   const id = req.params.id; // Obtendo o id do usuário da URL
 
-  const q = "SELECT * FROM tasks WHERE id_user = ?";
+  const q =
+    "SELECT task_title, task_description, id FROM tasks WHERE id_user = ?";
   db_crud.query(q, [id], (err, result) => {
     if (err) {
       console.error(err);
@@ -32,29 +33,25 @@ export const getTasksByUsers = (req, res) => {
 };
 
 export const postTask = (req, res) => {
-  const { task_title, task_description, id_user, checked } = req.body;
+  const { task_title, task_description, id_user } = req.body;
 
   const q = `
-        INSERT INTO tasks (task_title, task_description, id_user, checked)
-        VALUES (?, ?, ?, ?)`;
+        INSERT INTO tasks (task_title, task_description, id_user)
+        VALUES (?, ?, ?)`;
 
-  db_crud.query(
-    q,
-    [task_title, task_description, id_user, checked],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        return res
-          .status(500)
-          .json({ error: "Erro ao inserir nova tarefa ao banco de dados" });
-      }
-
-      return res.status(201).json({
-        message: "Tarefa adicionada com sucesso",
-        taskId: result.insertId,
-      }); // Corrigido para "taskId"
+  db_crud.query(q, [task_title, task_description, id_user], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res
+        .status(500)
+        .json({ error: "Erro ao inserir nova tarefa ao banco de dados" });
     }
-  );
+
+    return res.status(201).json({
+      message: "Tarefa adicionada com sucesso",
+      taskId: result.insertId,
+    }); // Corrigido para "taskId"
+  });
 };
 
 export const deleteTask = (req, res) => {
@@ -76,7 +73,7 @@ export const deleteTask = (req, res) => {
   });
 };
 
-// Método PUT para atualizar um usuário completamente
+// Método PUT para atualizar uma task completamente
 export const putTasks = (req, res) => {
   const id = req.params.id; // Obtém o ID da tarefa da URL
   const { task_title, task_description, id_user } = req.body;
