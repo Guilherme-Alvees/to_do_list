@@ -27,3 +27,4 @@ dist-ssr
 # Ignore .env files
 /.env               # Ignora o .env na raiz do projeto
 crud_api/secrets/.env   # Ignora o .env dentro de secrets no backend
+crud_ui/secrets/ProtectedRoute.jsx   # Ignora o componentes 'ProtectedRoute.jsx'

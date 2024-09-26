@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/authentication/Login";
 import Register from "./pages/authentication/Register";
 import Crud from "./pages/home/Crud";
+// import ProtectedRoute from "../secrets/ProtectedRoute";
 
 function App() {
   return (

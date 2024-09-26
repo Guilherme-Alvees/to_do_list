@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -13,6 +12,15 @@ import { Link as RouterLink } from "react-router-dom";
 
 function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const storedUserName = localStorage.getItem("userName");
+    console.log("Nome do usuário recuperado:", storedUserName); // Depuração
+    if (storedUserName) {
+      setUserName(storedUserName);
+    }
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -23,9 +31,11 @@ function Navbar() {
   };
 
   const handleLogout = () => {
+    // Ao fazer logout, remover as informações do usuário
+    localStorage.removeItem("token");
+    localStorage.removeItem("userName");
     console.log("Usuário saiu.");
     setAnchorEl(null);
-    // Lógica de logout (limpar tokens, etc.)
   };
 
   return (
@@ -34,10 +44,7 @@ function Navbar() {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           To do List
         </Typography>
-        <Typography>
-          Olá, Usuário
-          {/* {userName ? `Olá, ${userName}` : "Olá, Usuário"} */}
-        </Typography>
+        <Typography>Olá, {userName ? userName : "Visitante"}!</Typography>
         <IconButton
           edge="end"
           color="inherit"
@@ -64,9 +71,6 @@ function Navbar() {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem component={RouterLink} to="/" onClick={handleLogout}>
-            Perfil
-          </MenuItem>
           <MenuItem component={RouterLink} to="/login" onClick={handleLogout}>
             Sair
           </MenuItem>

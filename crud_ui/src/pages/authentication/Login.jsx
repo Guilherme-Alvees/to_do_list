@@ -49,7 +49,16 @@ const Login = () => {
 
     try {
       const response = await loginUser(loginUserData);
+
+      // Salvar o token e os dados do usuário no localStorage
+      const { token, user } = response.data;
+      localStorage.setItem("token", token); // se o token for necessário em outras requisições
+      localStorage.setItem("userName", user.name); // Salvando o nome do usuário
+      localStorage.setItem("UserPhone", user.phone); // Salvando o telefone do usuário
+      localStorage.setItem("UserEmail", user.email); // Salvando o email do usuário
+
       console.log("Usuário autenticado com sucesso", response.data);
+
       // Redireciona para a rota principal após sucesso
       navigate("/");
     } catch (error) {

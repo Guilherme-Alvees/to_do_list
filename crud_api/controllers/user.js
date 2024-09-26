@@ -9,7 +9,8 @@ const JWT_SECRET = process.env.JWT_SECRET_KEY || "default_secret_key";
 
 // Autenticação de Usuários
 export const loginUser = (req, res) => {
-  const q = "SELECT id, email, password FROM users WHERE email = ?";
+  const q =
+    "SELECT id, email, phone, name, password FROM users WHERE email = ?";
 
   const { email, password } = req.body;
 
@@ -42,6 +43,8 @@ export const loginUser = (req, res) => {
       token,
       user: {
         id: user.id,
+        name: user.name,
+        phone: user.phone,
         email: user.email,
       },
     });

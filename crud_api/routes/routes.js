@@ -25,7 +25,7 @@ const router = express.Router();
 router.post("/login", loginUser);
 
 // Users
-router.get("/users", authMiddleware, getUserProfile);
+router.get("/profile", authMiddleware, getUserProfile); // Rota para obter o perfil do Usuario após o login
 router.get("/users", getUsers); // Rota para obter todos os usuários
 router.post("/users", validateRegister, registerUser); // Rota para adicionar um novo usuário
 router.put("/users/:id", putUser); // Rota para atualizar um usuário completamente
